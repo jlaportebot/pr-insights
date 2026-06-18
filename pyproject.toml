@@ -1,0 +1,70 @@
+[project]
+name = "pr-insights"
+version = "0.1.0"
+description = "Analyze GitHub pull request patterns and generate insights on review times, merge patterns, and contributor statistics"
+readme = "README.md"
+authors = [{name = "John Laporte", email = "jlaportebot@gmail.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "rich>=13.7",
+    "httpx>=0.27",
+    "pydantic>=2.8",
+    "pyyaml>=6.0",
+    "python-dateutil>=2.9",
+    "tenacity>=8.2",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[dependency-groups]
+dev = ["ruff", "ty", "pytest", "pytest-cov", "pytest-mock", "pytest-asyncio"]
+test = ["pytest", "pytest-cov", "pytest-mock", "httpx", "pytest-asyncio"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D", "COM812", "ISC001", "T201", "T203", "S101", "DTZ001", "PLR2004", "ANN201", "ANN202", "ANN401", "PTH123", "ASYNC230", "PLC0415"]
+
+# Test files have different conventions
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "DTZ001", "PLR2004", "ANN201", "ANN202", "ANN401", "ANN003", "ARG001", "ANN001", "ANN002", "SLF001", "S106", "E501", "UP042", "FURB162", "EM101", "TRY003", "PYI034", "PERF401", "PLW2901"]
+"src/pr_insights/cli.py" = ["PLR0913", "ANN201", "ANN202", "E501", "UP045", "DTZ005", "F841", "PLR2004", "PLC0415", "ASYNC230", "PTH123", "ANN001", "ANN204", "UP045"]
+"src/pr_insights/analyzer.py" = ["ANN204", "DTZ005", "E501", "UP045"]
+"src/pr_insights/github_client.py" = ["ANN204", "E501", "TRY003", "EM101", "PYI034", "ANN001", "PLW2901", "PERF401", "FURB162", "UP042"]
+"src/pr_insights/models.py" = ["UP042", "E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+addopts = "--cov=pr_insights --cov-report=term-missing --cov-fail-under=80 -v"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[tool.ty.environment]
+python-version = "3.11"
+
+[tool.ty.terminal]
+error-on-warning = true
+
+[tool.ty.rules]
+possibly-unresolved-reference = "error"
+unused-ignore-comment = "warn"
+
+[build-system]
+requires = ["uv_build>=0.11.8,<0.12.0"]
+build-backend = "uv_build"
