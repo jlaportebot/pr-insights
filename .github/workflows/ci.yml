@@ -72,4 +72,4 @@ jobs:
       - name: Verify package
         run: |
           pip install dist/*.whl
-          pr-insights --help
+          python -m pr_insights --help
