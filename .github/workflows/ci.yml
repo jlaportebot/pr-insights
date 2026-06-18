@@ -70,4 +70,6 @@ jobs:
         run: uv build
 
       - name: Verify package
-        run: uv run pip install dist/*.whl && pr-insights --help
+        run: |
+          pip install dist/*.whl
+          pr-insights --help
